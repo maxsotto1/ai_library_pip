@@ -2,10 +2,9 @@
 
 `ai_library` is a Python package that exposes model training, inference, metrics recording, cron scheduling, and package-based configuration management.
 
-## Package overview
+## Package Overview
 
-
-### Available top-level APIs
+### Available Top-Level APIs
 
 - `ai_library.validate_config(config_path=None)`
   - Loads and validates the package default `ai_library/config.yaml` if no path is provided.
@@ -32,3 +31,37 @@
 - `ai_library.add_to_cron()` / `ai_library.remove_from_cron()`
   - Manage cron scheduling for recurring training runs.
   - Adds or removes a cron job that runs `python3 -m ai_library.codebase.setup.train`.
+
+## How to Use
+
+### Configuration
+from ai_library import validate_config, update_config, show_config
+
+update_config(None, updates=["parquet_train_size", 100000])
+show_config()
+validate_config()
+
+### Train and Infer
+from ai_library import train, infer
+
+# Manually use train (no cron)
+train()
+
+# Inference
+predictions, first_predicted, last_predicted, data_frequency, conformal_q = infer()
+
+### Cron Scheduling
+import ai_library.codebase.setup.cron_manager as cron_manager
+
+cron_manager.add_to_cron()
+cron_manager.remove_from_cron()
+
+### Metric Recorder Function
+Make sure that `.env` is reachable in the folder where this is executed, and that the specified port is reachable.
+
+Sample `.env` configuration:
+MON_CLIENT_STOMP_HOST=127.0.0.1
+MON_CLIENT_STOMP_PORT=61622
+
+Execution command:
+nohup python3 -c "from ai_library import record; record.main()" > record.log 2>&1 &
