@@ -48,4 +48,5 @@ poll_interval_seconds: 5.0
 flush_max_rows: 5000
 flush_max_seconds: 60.0
 parquet_train_size: 100000
+pivot_df: true
 

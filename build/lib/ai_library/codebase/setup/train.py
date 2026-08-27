@@ -26,21 +26,23 @@ def get_last_window_data_and_train():
         pipeline = XGBoost_pipeline()
     elif pipeline_type == "itransformer":
         pipeline = iTransformer_pipeline()
-    df = pd.read_parquet(parquet_path).tail(parquet_train_size)
+    df = pd.read_parquet(parquet_path)
     # Basic safety checks: parquet should contain time column and enough rows
     if df.empty:
         raise ValueError(f"No data found in parquet file: {parquet_path}")
     if "ts" not in df.columns:
         raise ValueError(f"Parquet file {parquet_path} missing required 'ts' column")
-    required_rows = int(train_window) + int(train_horizon)
-    if len(df) < required_rows:
-        raise ValueError(
-            f"Not enough rows in parquet file: found {len(df)}, need at least {required_rows} (window + horizon)"
-        )
-
-    df = pivot_df(df)
+    required_rows = int((train_window + train_horizon + stride) / min(splits))
+    pivot_df_bool = config.get("pivot_df")
+    if pivot_df_bool:
+        df = pivot_df(df)
     print(df.head())
     df = df.set_index("ts").resample(resample_frequency).mean().interpolate("linear").bfill().ffill().reset_index()
+    df = df.tail(parquet_train_size)
+    if len(df) < required_rows:
+            raise ValueError(
+                f"Not enough rows in parquet file: found {len(df)}, need at least {required_rows} (window + horizon + stride)/min(splits)"
+            )
     if pipeline_type == "gmlp":
         dls, test_dl = pipeline.preprocess_splits(df, targets, splits, train_horizon, train_window, stride, cols_to_drop)
         model, rmse, conformal_q = pipeline.train(dls, test_dl)

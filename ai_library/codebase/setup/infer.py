@@ -63,7 +63,10 @@ def inference():
     data_frequency = pd.to_timedelta(config.get("data_frequency"))
     df = pd.read_parquet(config["parquet_path"])
     max_ts = df["ts"].max().floor(data_frequency)
-    df = pivot_df(df).set_index("ts")
+    pivot_df_bool = config.get("pivot_df")
+    if pivot_df_bool:
+        df = pivot_df(df)
+    df = df.set_index("ts")
 
     # Create a full time index from min to max timestamp
     full_idx = pd.date_range(start=df.index.min(), end=max_ts, freq=data_frequency)

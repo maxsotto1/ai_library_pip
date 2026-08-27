@@ -91,3 +91,5 @@ after a trained model is accessible via the path, that is given in the config fi
 ```python
 predictions, first_predicted, last_predicted, data_frequency, conformal_q = infer()
 ```
+# git link:
+https://github.com/maxsotto1/ai_library_pip
