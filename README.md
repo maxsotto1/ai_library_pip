@@ -63,18 +63,22 @@ Execution command:
 ```bash
 nohup python3 -c "from ai_library import record; record.main()" > record.log 2>&1 &
 ```
+nohup is not necessary, but make sure to run the recorder in the background. 
 
 ### Train and Infer
+import the functions:
 ```python
 from ai_library import train, infer
 ```
 
 # Manually use train (no cron)
+the standard way is to use the cron functions to train in intervals. This might still be useful, for example when switching models.
 ```python
 train()
 ```
 
 ### Cron Scheduling
+add_to_cron creates a cron job that runs the train function in intervals.
 ```python
 import ai_library.codebase.setup.cron_manager as cron_manager
 
@@ -83,6 +87,7 @@ cron_manager.remove_from_cron()
 ```
 
 # Inference
+after a trained model is accessible via the path, that is given in the config file, inference can be applied:
 ```python
 predictions, first_predicted, last_predicted, data_frequency, conformal_q = infer()
 ```
