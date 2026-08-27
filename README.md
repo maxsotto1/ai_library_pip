@@ -43,6 +43,7 @@ pip install ai-library-swch==0.1.1
 a safe python version is 3.12.3
 
 ### Configuration
+this is an example of how config can be printed and updated.
 ```python
 from ai_library import validate_config, update_config, show_config
 
