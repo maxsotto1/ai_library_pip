@@ -50,28 +50,6 @@ update_config(None, updates=["parquet_train_size", 100000])
 show_config()
 validate_config()
 ```
-### Train and Infer
-```python
-from ai_library import train, infer
-```
-
-# Manually use train (no cron)
-```python
-train()
-```
-
-# Inference
-```python
-predictions, first_predicted, last_predicted, data_frequency, conformal_q = infer()
-```
-
-### Cron Scheduling
-```python
-import ai_library.codebase.setup.cron_manager as cron_manager
-
-cron_manager.add_to_cron()
-cron_manager.remove_from_cron()
-```
 
 ### Metric Recorder Function
 Make sure that `.env` is reachable in the folder where this is executed, and that the specified port is reachable.
@@ -83,4 +61,27 @@ MON_CLIENT_STOMP_PORT=61622
 Execution command:
 ```bash
 nohup python3 -c "from ai_library import record; record.main()" > record.log 2>&1 &
+```
+
+### Train and Infer
+```python
+from ai_library import train, infer
+```
+
+# Manually use train (no cron)
+```python
+train()
+```
+
+### Cron Scheduling
+```python
+import ai_library.codebase.setup.cron_manager as cron_manager
+
+cron_manager.add_to_cron()
+cron_manager.remove_from_cron()
+```
+
+# Inference
+```python
+predictions, first_predicted, last_predicted, data_frequency, conformal_q = infer()
 ```
