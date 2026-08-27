@@ -79,4 +79,6 @@ MON_CLIENT_STOMP_HOST=127.0.0.1
 MON_CLIENT_STOMP_PORT=61622
 ```
 Execution command:
+```bash
 nohup python3 -c "from ai_library import record; record.main()" > record.log 2>&1 &
+```
