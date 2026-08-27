@@ -37,7 +37,9 @@
 ## How to Use
 
 ### Install
+```bash
 pip install ai-library-swch==0.1.1 
+```
 a safe python version is 3.12.3
 
 ### Configuration
