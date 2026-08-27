@@ -24,6 +24,8 @@
 - `ai_library.infer()`
   - Loads package configuration.
   - Loads a saved model and performs inference.
+  - returns predictions, first_predicted, last_predicted, data_frequency, conformal_q 
+  - conformal_q is the safety margin in order to be 1-alpha accurate for the predicted time window
 
 - `ai_library.record`
   - Use `ai_library.record.main()` or run the module directly to start metric collection.
@@ -39,33 +41,42 @@ pip install ai-library-swch==0.1.1
 a safe python version is 3.12.3
 
 ### Configuration
+```python
 from ai_library import validate_config, update_config, show_config
 
 update_config(None, updates=["parquet_train_size", 100000])
 show_config()
 validate_config()
-
+```
 ### Train and Infer
+```python
 from ai_library import train, infer
+```
 
 # Manually use train (no cron)
+```python
 train()
+```
 
 # Inference
+```python
 predictions, first_predicted, last_predicted, data_frequency, conformal_q = infer()
+```
 
 ### Cron Scheduling
+```python
 import ai_library.codebase.setup.cron_manager as cron_manager
 
 cron_manager.add_to_cron()
 cron_manager.remove_from_cron()
+```
 
 ### Metric Recorder Function
 Make sure that `.env` is reachable in the folder where this is executed, and that the specified port is reachable.
-
 Sample `.env` configuration:
+```python
 MON_CLIENT_STOMP_HOST=127.0.0.1
 MON_CLIENT_STOMP_PORT=61622
-
+```
 Execution command:
 nohup python3 -c "from ai_library import record; record.main()" > record.log 2>&1 &
